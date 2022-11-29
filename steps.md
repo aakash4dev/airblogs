@@ -1,0 +1,1 @@
+ignite scaffold chain airblogs --address-prefix air

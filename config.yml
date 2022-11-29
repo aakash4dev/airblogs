@@ -1,11 +1,12 @@
 version: 1
 accounts:
-  - name: alice
+  - name: aakash
     coins: ["20000token", "200000000stake"]
-  - name: bob
+    mnemonic: play butter frown city voyage pupil rabbit wheat thrive mind skate turkey helmet thrive door either differ gate exhibit impose city swallow goat faint
+  - name: tiger
     coins: ["10000token", "100000000stake"]
 validators:
-  - name: alice
+  - name: aakash
     bonded: "100000000stake"
 client:
   openapi:
@@ -15,5 +16,5 @@ client:
   vuex:
     path: "vue/src/store"
 faucet:
-  name: bob
+  name: tiger
   coins: ["5token", "100000stake"]
