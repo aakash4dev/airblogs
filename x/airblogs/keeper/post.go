@@ -3,6 +3,7 @@ package keeper
 import (
 	"airblogs/x/airblogs/types"
 	"encoding/binary"
+	"fmt"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -45,8 +46,16 @@ func (k Keeper) newAirPost(ctx sdk.Context, post types.AirPost) uint64 { // retu
 	// post data
 	store.Set(byteKey, finalPostValues)
 
+	gotthis := store.Get(byteKey)
+
+	fmt.Print(gotthis)
+
+	fmt.Println("saved at", byteKey)
+
 	// update post count
 	k.setNumberOfPosts(ctx, count+1)
+
+	fmt.Println(count)
 
 	return count
 }

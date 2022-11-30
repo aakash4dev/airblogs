@@ -3,9 +3,8 @@ package keeper
 import (
 	"airblogs/x/airblogs/types"
 	"context"
-	// "fmt"
+	"fmt"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	// "os"
 )
 
 // "k" import all x/airblogs/keeper files(functions and values), its like module.
@@ -20,8 +19,9 @@ func (k msgServer) Post(goCtx context.Context, msg *types.MsgPost) (*types.MsgPo
 		Body:    msg.Body,
 	}
 
-	// fmt.Println("😄user give this data", ctx, post)
 	id := k.newAirPost(ctx, post)
+
+	fmt.Println("air ka blog is saved with 🆔", id, "👍")
 	// os.Exit(0) // its same as process.exit() of JS🧑‍💻
 
 	// return &types.MsgPostResponse{}, nil
