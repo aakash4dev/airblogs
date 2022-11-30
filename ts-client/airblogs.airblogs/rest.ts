@@ -21,6 +21,12 @@ export type AirblogsMsgPostblogResponse = object;
  */
 export type AirblogsParams = object;
 
+export interface AirblogsQueryGetblogsResponse {
+  title?: string;
+  imgurl?: string;
+  body?: string;
+}
+
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
@@ -165,6 +171,22 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryGetblogs
+   * @summary Queries a list of Getblogs items.
+   * @request GET:/airblogs/airblogs/getblogs/{id}
+   */
+  queryGetblogs = (id: string, params: RequestParams = {}) =>
+    this.request<AirblogsQueryGetblogsResponse, RpcStatus>({
+      path: `/airblogs/airblogs/getblogs/${id}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *

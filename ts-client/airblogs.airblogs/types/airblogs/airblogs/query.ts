@@ -14,6 +14,17 @@ export interface QueryParamsResponse {
   params: Params | undefined;
 }
 
+export interface QueryGetblogsRequest {
+  /** cosmos.base.query.v1beta1.PageRequest pagination = 1; */
+  id: string;
+}
+
+export interface QueryGetblogsResponse {
+  title: string;
+  imgurl: string;
+  body: string;
+}
+
 function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
@@ -102,10 +113,126 @@ export const QueryParamsResponse = {
   },
 };
 
+function createBaseQueryGetblogsRequest(): QueryGetblogsRequest {
+  return { id: "" };
+}
+
+export const QueryGetblogsRequest = {
+  encode(message: QueryGetblogsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetblogsRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetblogsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetblogsRequest {
+    return { id: isSet(object.id) ? String(object.id) : "" };
+  },
+
+  toJSON(message: QueryGetblogsRequest): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetblogsRequest>, I>>(object: I): QueryGetblogsRequest {
+    const message = createBaseQueryGetblogsRequest();
+    message.id = object.id ?? "";
+    return message;
+  },
+};
+
+function createBaseQueryGetblogsResponse(): QueryGetblogsResponse {
+  return { title: "", imgurl: "", body: "" };
+}
+
+export const QueryGetblogsResponse = {
+  encode(message: QueryGetblogsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.title !== "") {
+      writer.uint32(10).string(message.title);
+    }
+    if (message.imgurl !== "") {
+      writer.uint32(18).string(message.imgurl);
+    }
+    if (message.body !== "") {
+      writer.uint32(26).string(message.body);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetblogsResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetblogsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.title = reader.string();
+          break;
+        case 2:
+          message.imgurl = reader.string();
+          break;
+        case 3:
+          message.body = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetblogsResponse {
+    return {
+      title: isSet(object.title) ? String(object.title) : "",
+      imgurl: isSet(object.imgurl) ? String(object.imgurl) : "",
+      body: isSet(object.body) ? String(object.body) : "",
+    };
+  },
+
+  toJSON(message: QueryGetblogsResponse): unknown {
+    const obj: any = {};
+    message.title !== undefined && (obj.title = message.title);
+    message.imgurl !== undefined && (obj.imgurl = message.imgurl);
+    message.body !== undefined && (obj.body = message.body);
+    return obj;
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryGetblogsResponse>, I>>(object: I): QueryGetblogsResponse {
+    const message = createBaseQueryGetblogsResponse();
+    message.title = object.title ?? "";
+    message.imgurl = object.imgurl ?? "";
+    message.body = object.body ?? "";
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
+  /** Queries a list of Getblogs items. */
+  Getblogs(request: QueryGetblogsRequest): Promise<QueryGetblogsResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -113,11 +240,18 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc;
     this.Params = this.Params.bind(this);
+    this.Getblogs = this.Getblogs.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
     const promise = this.rpc.request("airblogs.airblogs.Query", "Params", data);
     return promise.then((data) => QueryParamsResponse.decode(new _m0.Reader(data)));
+  }
+
+  Getblogs(request: QueryGetblogsRequest): Promise<QueryGetblogsResponse> {
+    const data = QueryGetblogsRequest.encode(request).finish();
+    const promise = this.rpc.request("airblogs.airblogs.Query", "Getblogs", data);
+    return promise.then((data) => QueryGetblogsResponse.decode(new _m0.Reader(data)));
   }
 }
 

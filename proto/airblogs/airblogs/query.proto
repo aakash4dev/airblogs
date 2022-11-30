@@ -1,10 +1,10 @@
 syntax = "proto3";
 package airblogs.airblogs;
-
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "airblogs/airblogs/params.proto";
+import "airblogs/airblogs/blog.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "airblogs/x/airblogs/types";
@@ -15,7 +15,12 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/airblogs/airblogs/params";
   }
-  // this line is used by starport scaffolding # 2
+  // Queries a list of Getblogs items.
+	rpc Getblogs(QueryGetblogsRequest) returns (QueryGetblogsResponse) {
+		option (google.api.http).get = "/airblogs/airblogs/getblogs/{id}";
+	}
+
+// this line is used by starport scaffolding # 2
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -25,6 +30,23 @@ message QueryParamsRequest {}
 message QueryParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetblogsRequest {
+  string id = 1;
+  // cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryGetblogsResponse {
+  string title = 1;
+  string imgurl = 2;
+  string body = 3;
+
+  // Returning a list of posts
+  // repeated airPost Posts = 1;
+
+  // Adding pagination to response
+  // cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // this line is used by starport scaffolding # 3

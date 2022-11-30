@@ -36,6 +36,7 @@ function getStructure(template) {
 const getDefaultState = () => {
 	return {
 				Params: {},
+				Getblogs: {},
 				
 				_Structure: {
 						airPost: getStructure(airPost.fromPartial({})),
@@ -73,6 +74,12 @@ export default {
 						(<any> params).query=null
 					}
 			return state.Params[JSON.stringify(params)] ?? {}
+		},
+				getGetblogs: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.Getblogs[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -130,19 +137,28 @@ export default {
 		},
 		
 		
-		async sendMsgPost({ rootGetters }, { value, fee = [], memo = '' }) {
+		
+		
+		 		
+		
+		
+		async QueryGetblogs({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
 			try {
-				const client=await initClient(rootGetters)
-				const result = await client.AirblogsAirblogs.tx.sendMsgPost({ value, fee: {amount: fee, gas: "200000"}, memo })
-				return result
+				const key = params ?? {};
+				const client = initClient(rootGetters);
+				let value= (await client.AirblogsAirblogs.query.queryGetblogs( key.id)).data
+				
+					
+				commit('QUERY', { query: 'Getblogs', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryGetblogs', payload: { options: { all }, params: {...key},query }})
+				return getters['getGetblogs']( { params: {...key}, query}) ?? {}
 			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgPost:Init Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new Error('TxClient:MsgPost:Send Could not broadcast Tx: '+ e.message)
-				}
+				throw new Error('QueryClient:QueryGetblogs API Node Unavailable. Could not perform query: ' + e.message)
+				
 			}
 		},
+		
+		
 		async sendMsgPostblog({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const client=await initClient(rootGetters)
@@ -156,20 +172,20 @@ export default {
 				}
 			}
 		},
-		
-		async MsgPost({ rootGetters }, { value }) {
+		async sendMsgPost({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
-				const client=initClient(rootGetters)
-				const msg = await client.AirblogsAirblogs.tx.msgPost({value})
-				return msg
+				const client=await initClient(rootGetters)
+				const result = await client.AirblogsAirblogs.tx.sendMsgPost({ value, fee: {amount: fee, gas: "200000"}, memo })
+				return result
 			} catch (e) {
 				if (e == MissingWalletError) {
 					throw new Error('TxClient:MsgPost:Init Could not initialize signing client. Wallet is required.')
-				} else{
-					throw new Error('TxClient:MsgPost:Create Could not create message: ' + e.message)
+				}else{
+					throw new Error('TxClient:MsgPost:Send Could not broadcast Tx: '+ e.message)
 				}
 			}
 		},
+		
 		async MsgPostblog({ rootGetters }, { value }) {
 			try {
 				const client=initClient(rootGetters)
@@ -180,6 +196,19 @@ export default {
 					throw new Error('TxClient:MsgPostblog:Init Could not initialize signing client. Wallet is required.')
 				} else{
 					throw new Error('TxClient:MsgPostblog:Create Could not create message: ' + e.message)
+				}
+			}
+		},
+		async MsgPost({ rootGetters }, { value }) {
+			try {
+				const client=initClient(rootGetters)
+				const msg = await client.AirblogsAirblogs.tx.msgPost({value})
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgPost:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgPost:Create Could not create message: ' + e.message)
 				}
 			}
 		},
