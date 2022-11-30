@@ -44345,6 +44345,14 @@ paths:
       tags:
         - Query
 definitions:
+  airblogs.airblogs.MsgPostResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uint64
+  airblogs.airblogs.MsgPostblogResponse:
+    type: object
   airblogs.airblogs.Params:
     type: object
     description: Params defines the parameters for the module.

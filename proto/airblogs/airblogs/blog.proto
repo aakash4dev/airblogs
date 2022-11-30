@@ -1,0 +1,12 @@
+syntax = "proto3";
+package airblogs.airblogs;
+option  go_package ="airblogs/x/airblogs/types";
+
+message airPost{
+	uint64 id = 1;
+	string creator = 2;
+	string title=3;
+	string imgurl=4;
+	string body=5;
+	string serversideData=6; // we will put some data from our side.
+}

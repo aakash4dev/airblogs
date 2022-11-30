@@ -12,6 +12,9 @@ const (
 
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_airblogs"
+
+	PostKey      = "Post/value/" // value's of posts
+	PostCountKey = "Post/count/" // count number of posts
 )
 
 func KeyPrefix(p string) []byte {

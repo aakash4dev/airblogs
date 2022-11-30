@@ -7,10 +7,32 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
+import { MsgPostblog } from "./types/airblogs/airblogs/tx";
+import { MsgPost } from "./types/airblogs/airblogs/tx";
 
 
-export {  };
+export { MsgPostblog, MsgPost };
 
+type sendMsgPostblogParams = {
+  value: MsgPostblog,
+  fee?: StdFee,
+  memo?: string
+};
+
+type sendMsgPostParams = {
+  value: MsgPost,
+  fee?: StdFee,
+  memo?: string
+};
+
+
+type msgPostblogParams = {
+  value: MsgPostblog,
+};
+
+type msgPostParams = {
+  value: MsgPost,
+};
 
 
 export const registry = new Registry(msgTypes);
@@ -30,6 +52,50 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
+		async sendMsgPostblog({ value, fee, memo }: sendMsgPostblogParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgPostblog: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgPostblog({ value: MsgPostblog.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgPostblog: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		async sendMsgPost({ value, fee, memo }: sendMsgPostParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgPost: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgPost({ value: MsgPost.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
+			} catch (e: any) {
+				throw new Error('TxClient:sendMsgPost: Could not broadcast Tx: '+ e.message)
+			}
+		},
+		
+		
+		msgPostblog({ value }: msgPostblogParams): EncodeObject {
+			try {
+				return { typeUrl: "/airblogs.airblogs.MsgPostblog", value: MsgPostblog.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgPostblog: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgPost({ value }: msgPostParams): EncodeObject {
+			try {
+				return { typeUrl: "/airblogs.airblogs.MsgPost", value: MsgPost.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgPost: Could not create message: ' + e.message)
+			}
+		},
 		
 	}
 };

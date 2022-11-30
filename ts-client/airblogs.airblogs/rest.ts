@@ -9,6 +9,13 @@
  * ---------------------------------------------------------------
  */
 
+export interface AirblogsMsgPostResponse {
+  /** @format uint64 */
+  id?: string;
+}
+
+export type AirblogsMsgPostblogResponse = object;
+
 /**
  * Params defines the parameters for the module.
  */
@@ -154,7 +161,7 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title airblogs/airblogs/genesis.proto
+ * @title airblogs/airblogs/blog.proto
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
