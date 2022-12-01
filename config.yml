@@ -4,7 +4,7 @@ accounts:
     coins: ["200000token", "200000000stake"]
     mnemonic: play butter frown city voyage pupil rabbit wheat thrive mind skate turkey helmet thrive door either differ gate exhibit impose city swallow goat faint
   - name: tiger
-    coins: ["10000token", "100000000stake"]
+    coins: ["100000token", "100000000stake"]
 validators:
   - name: aakash
     bonded: "100000000stake"

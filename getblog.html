@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Normal API CALL</title>
+</head>
+<body>
+	See Dev Tool's console.log 
+</body>
+<script>
+const fun=async()=>{
+	console.log('getting data')
+	var blogID=1 // blog number..
+	var data=await fetch(`http://localhost:1317/airblogs/airblogs/getblogs/${blogID}`)
+	var blog=await data.json()
+	console.log(blog)
+}
+fun()
+
+</script>
+</html>

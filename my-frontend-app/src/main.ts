@@ -6,7 +6,7 @@ import { Client } from '../../ts-client';
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 
 const mnemonic = "play butter frown city voyage pupil rabbit wheat thrive mind skate turkey helmet thrive door either differ gate exhibit impose city swallow goat faint";
-const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic);
+const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic,{prefix:"air"});
 
 const client = new Client({ 
         apiURL: "http://localhost:1317",
@@ -17,7 +17,22 @@ const client = new Client({
 );
 
 const balances = await client.CosmosBankV1Beta1.query.queryAllBalances('air13xkhcx2dquhqdml0k37sr7yndquwteuvp2mzz5');
-console.log(balances)
+console.log("Balances: \n",JSON.stringify(balances.data.balances))
+
+const res = await client.AirblogsAirblogs.tx.sendMsgPostblog({
+  value: {
+    creator:"air13xkhcx2dquhqdml0k37sr7yndquwteuvp2mzz5", 
+    title:"i would", 
+    imgurl:"i would", 
+    body:"i would", 
+  },
+  fee: {
+    amount: [{ amount: '0', denom: 'stake' }],
+    gas: '200000',
+  },
+  memo:"asdfasdf",
+});
+console.log(res) // transaction retusl
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
