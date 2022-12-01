@@ -1,0 +1,11 @@
+syntax = "proto3";
+package airblogs.airblogs;
+
+option go_package = "airblogs/x/airblogs/types";
+
+message Airpost {
+  
+  string title = 1; 
+  string body = 2; 
+  string imgurl = 3; 
+}

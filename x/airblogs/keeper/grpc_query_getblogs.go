@@ -20,7 +20,6 @@ func (k Keeper) Getblogs(goCtx context.Context, req *types.QueryGetblogsRequest)
 	fmt.Println("⌛⌛ getting blog data....")
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	// store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte(types.PostKey))
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte(types.PostCountKey))
 
 	// convert string ID to uint64

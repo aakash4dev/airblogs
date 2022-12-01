@@ -22,9 +22,9 @@ console.log("Balances: \n",JSON.stringify(balances.data.balances))
 const res = await client.AirblogsAirblogs.tx.sendMsgPostblog({
   value: {
     creator:"air13xkhcx2dquhqdml0k37sr7yndquwteuvp2mzz5", 
-    title:"i would", 
-    imgurl:"i would", 
-    body:"i would", 
+    title:"i would something just like this", 
+    imgurl:"tannana tannaa", 
+    body:"i would something just like this", 
   },
   fee: {
     amount: [{ amount: '0', denom: 'stake' }],

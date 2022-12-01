@@ -1,0 +1,14 @@
+syntax = "proto3";
+package airblogs.airblogs;
+
+option go_package = "airblogs/x/airblogs/types";
+
+message Comment {
+  uint64 id = 1;
+  string creator = 2; 
+  string title = 3; 
+  string body = 4; 
+  string imgurl = 5; 
+  uint64 postID = 6; 
+  int64 createdAt = 7;  
+}

@@ -9,6 +9,7 @@ option go_package = "airblogs/x/airblogs/types";
 service Msg {
       rpc Postblog(MsgPostblog) returns (MsgPostblogResponse);
   rpc Post(MsgPost) returns (MsgPostResponse);
+  rpc CreateComment(MsgCreateComment) returns (MsgCreateCommentResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
 }
 
@@ -31,6 +32,18 @@ message MsgPost {
 
 message MsgPostResponse {
   uint64 id = 1;
+}
+
+message MsgCreateComment {
+  string creator = 1;
+  uint64 postID = 2;
+  string title = 3;
+  string body = 4;
+  uint64 id = 5;
+}
+
+message MsgCreateCommentResponse {
+    uint64 id = 1;
 }
 
 // this line is used by starport scaffolding # proto/tx/message

@@ -5,6 +5,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "airblogs/airblogs/params.proto";
 import "airblogs/airblogs/blog.proto";
+import "airblogs/airblogs/comment.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "airblogs/x/airblogs/types";
@@ -18,6 +19,21 @@ service Query {
   // Queries a list of Getblogs items.
 	rpc Getblogs(QueryGetblogsRequest) returns (QueryGetblogsResponse) {
 		option (google.api.http).get = "/airblogs/airblogs/getblogs/{id}";
+	}
+
+// Queries a list of Getallblogs items.
+	rpc Getallblogs(QueryGetallblogsRequest) returns (QueryGetallblogsResponse) {
+		option (google.api.http).get = "/airblogs/airblogs/getallblogs";
+	}
+
+// Queries a Comment by id.
+	rpc Comment(QueryGetCommentRequest) returns (QueryGetCommentResponse) {
+		option (google.api.http).get = "/airblogs/airblogs/comment/{id}";
+	}
+
+	// Queries a list of Comment items.
+	rpc CommentAll(QueryAllCommentRequest) returns (QueryAllCommentResponse) {
+		option (google.api.http).get = "/airblogs/airblogs/comment";
 	}
 
 // this line is used by starport scaffolding # 2
@@ -47,6 +63,46 @@ message QueryGetblogsResponse {
 
   // Adding pagination to response
   // cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetallblogsRequest {
+    cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryGetallblogsResponse {
+  repeated airPost AirPost = 1 [(gogoproto.nullable) = false];
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+// message QueryGetallblogsResponse {
+  // 
+  // repeated airPost AirPost = 1;
+  // cosmos.base.query.v1beta1.PageResponse pagination = 2;
+// }
+
+  // string title = 1;
+  // string imgurl = 2;
+  // string body = 3;
+
+  // Returning a list of posts
+
+  // Adding pagination to response
+
+
+message QueryGetCommentRequest {
+	uint64 id = 1;
+}
+
+message QueryGetCommentResponse {
+	Comment Comment = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllCommentRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllCommentResponse {
+	repeated Comment Comment = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // this line is used by starport scaffolding # 3

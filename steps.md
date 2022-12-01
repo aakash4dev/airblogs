@@ -1,3 +1,11 @@
+IMP codes for testing this perticular project:-
+```
+airblogsd tx airblogs post "title bro" "url of image" "its the body of blog" --from aakash
+
+airblogsd q airblogs getblogs 1
+```
+<hr>
+
 ```
 ignite scaffold chain airblogs --address-prefix air
 
@@ -56,9 +64,13 @@ func (k Keeper) Getblogs(goCtx context.Context, req *types.QueryGetblogsRequest)
 
 ### Create GetAllBlogs :: CURD get(allblogs) 
 ```
-ignite scaffold query getblogs --response title imgurl body
+ignite scaffold query getblogs --response title,imgurl,body
 ```
 NOTE: `query` `get data`, and not take gas. `message` `post data` and can take gas if its any function make changes in blockchain
+--- make changes in files... ref: docs
+
+### Call functions 
+airblogsd tx blog create-post foo bar --from alice
 
 <hr><hr><hr><hr><hr>
 

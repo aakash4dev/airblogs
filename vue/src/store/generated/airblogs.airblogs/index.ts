@@ -1,10 +1,12 @@
 import { Client, registry, MissingWalletError } from 'airblogs-client-ts'
 
+import { Airpost } from "airblogs-client-ts/airblogs.airblogs/types"
 import { airPost } from "airblogs-client-ts/airblogs.airblogs/types"
+import { Comment } from "airblogs-client-ts/airblogs.airblogs/types"
 import { Params } from "airblogs-client-ts/airblogs.airblogs/types"
 
 
-export { airPost, Params };
+export { Airpost, airPost, Comment, Params };
 
 function initClient(vuexGetters) {
 	return new Client(vuexGetters['common/env/getEnv'], vuexGetters['common/wallet/signer'])
@@ -37,9 +39,14 @@ const getDefaultState = () => {
 	return {
 				Params: {},
 				Getblogs: {},
+				Getallblogs: {},
+				Comment: {},
+				CommentAll: {},
 				
 				_Structure: {
+						Airpost: getStructure(Airpost.fromPartial({})),
 						airPost: getStructure(airPost.fromPartial({})),
+						Comment: getStructure(Comment.fromPartial({})),
 						Params: getStructure(Params.fromPartial({})),
 						
 		},
@@ -80,6 +87,24 @@ export default {
 						(<any> params).query=null
 					}
 			return state.Getblogs[JSON.stringify(params)] ?? {}
+		},
+				getGetallblogs: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.Getallblogs[JSON.stringify(params)] ?? {}
+		},
+				getComment: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.Comment[JSON.stringify(params)] ?? {}
+		},
+				getCommentAll: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.CommentAll[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -159,6 +184,80 @@ export default {
 		},
 		
 		
+		
+		
+		 		
+		
+		
+		async QueryGetallblogs({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const client = initClient(rootGetters);
+				let value= (await client.AirblogsAirblogs.query.queryGetallblogs(query ?? undefined)).data
+				
+					
+				while (all && (<any> value).pagination && (<any> value).pagination.next_key!=null) {
+					let next_values=(await client.AirblogsAirblogs.query.queryGetallblogs({...query ?? {}, 'pagination.key':(<any> value).pagination.next_key} as any)).data
+					value = mergeResults(value, next_values);
+				}
+				commit('QUERY', { query: 'Getallblogs', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryGetallblogs', payload: { options: { all }, params: {...key},query }})
+				return getters['getGetallblogs']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryGetallblogs API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		
+		
+		 		
+		
+		
+		async QueryComment({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const client = initClient(rootGetters);
+				let value= (await client.AirblogsAirblogs.query.queryComment( key.id)).data
+				
+					
+				commit('QUERY', { query: 'Comment', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryComment', payload: { options: { all }, params: {...key},query }})
+				return getters['getComment']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryComment API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		
+		
+		 		
+		
+		
+		async QueryCommentAll({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const client = initClient(rootGetters);
+				let value= (await client.AirblogsAirblogs.query.queryCommentAll(query ?? undefined)).data
+				
+					
+				while (all && (<any> value).pagination && (<any> value).pagination.next_key!=null) {
+					let next_values=(await client.AirblogsAirblogs.query.queryCommentAll({...query ?? {}, 'pagination.key':(<any> value).pagination.next_key} as any)).data
+					value = mergeResults(value, next_values);
+				}
+				commit('QUERY', { query: 'CommentAll', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryCommentAll', payload: { options: { all }, params: {...key},query }})
+				return getters['getCommentAll']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryCommentAll API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
 		async sendMsgPostblog({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const client=await initClient(rootGetters)
@@ -182,6 +281,19 @@ export default {
 					throw new Error('TxClient:MsgPost:Init Could not initialize signing client. Wallet is required.')
 				}else{
 					throw new Error('TxClient:MsgPost:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
+		async sendMsgCreateComment({ rootGetters }, { value, fee = [], memo = '' }) {
+			try {
+				const client=await initClient(rootGetters)
+				const result = await client.AirblogsAirblogs.tx.sendMsgCreateComment({ value, fee: {amount: fee, gas: "200000"}, memo })
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgCreateComment:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgCreateComment:Send Could not broadcast Tx: '+ e.message)
 				}
 			}
 		},
@@ -209,6 +321,19 @@ export default {
 					throw new Error('TxClient:MsgPost:Init Could not initialize signing client. Wallet is required.')
 				} else{
 					throw new Error('TxClient:MsgPost:Create Could not create message: ' + e.message)
+				}
+			}
+		},
+		async MsgCreateComment({ rootGetters }, { value }) {
+			try {
+				const client=initClient(rootGetters)
+				const msg = await client.AirblogsAirblogs.tx.msgCreateComment({value})
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgCreateComment:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgCreateComment:Create Could not create message: ' + e.message)
 				}
 			}
 		},
