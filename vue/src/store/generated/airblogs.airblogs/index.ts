@@ -258,19 +258,6 @@ export default {
 		},
 		
 		
-		async sendMsgPostblog({ rootGetters }, { value, fee = [], memo = '' }) {
-			try {
-				const client=await initClient(rootGetters)
-				const result = await client.AirblogsAirblogs.tx.sendMsgPostblog({ value, fee: {amount: fee, gas: "200000"}, memo })
-				return result
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgPostblog:Init Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new Error('TxClient:MsgPostblog:Send Could not broadcast Tx: '+ e.message)
-				}
-			}
-		},
 		async sendMsgPost({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const client=await initClient(rootGetters)
@@ -281,6 +268,19 @@ export default {
 					throw new Error('TxClient:MsgPost:Init Could not initialize signing client. Wallet is required.')
 				}else{
 					throw new Error('TxClient:MsgPost:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
+		async sendMsgPostblog({ rootGetters }, { value, fee = [], memo = '' }) {
+			try {
+				const client=await initClient(rootGetters)
+				const result = await client.AirblogsAirblogs.tx.sendMsgPostblog({ value, fee: {amount: fee, gas: "200000"}, memo })
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgPostblog:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgPostblog:Send Could not broadcast Tx: '+ e.message)
 				}
 			}
 		},
@@ -298,19 +298,6 @@ export default {
 			}
 		},
 		
-		async MsgPostblog({ rootGetters }, { value }) {
-			try {
-				const client=initClient(rootGetters)
-				const msg = await client.AirblogsAirblogs.tx.msgPostblog({value})
-				return msg
-			} catch (e) {
-				if (e == MissingWalletError) {
-					throw new Error('TxClient:MsgPostblog:Init Could not initialize signing client. Wallet is required.')
-				} else{
-					throw new Error('TxClient:MsgPostblog:Create Could not create message: ' + e.message)
-				}
-			}
-		},
 		async MsgPost({ rootGetters }, { value }) {
 			try {
 				const client=initClient(rootGetters)
@@ -321,6 +308,19 @@ export default {
 					throw new Error('TxClient:MsgPost:Init Could not initialize signing client. Wallet is required.')
 				} else{
 					throw new Error('TxClient:MsgPost:Create Could not create message: ' + e.message)
+				}
+			}
+		},
+		async MsgPostblog({ rootGetters }, { value }) {
+			try {
+				const client=initClient(rootGetters)
+				const msg = await client.AirblogsAirblogs.tx.msgPostblog({value})
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgPostblog:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgPostblog:Create Could not create message: ' + e.message)
 				}
 			}
 		},

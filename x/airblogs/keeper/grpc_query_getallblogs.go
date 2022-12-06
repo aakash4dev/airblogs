@@ -3,6 +3,8 @@ package keeper
 import (
 	"airblogs/x/airblogs/types"
 	"context"
+	"fmt"
+
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
@@ -18,11 +20,16 @@ func (k Keeper) Getallblogs(goCtx context.Context, req *types.QueryGetallblogsRe
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), []byte(types.PostKey))
 
+	fmt.Print("🤔❓ Is code reaching here: test in cli")
+
 	pageRes, err := query.Paginate(store, req.Pagination, func(key []byte, value []byte) error {
 		var blog types.AirPost
 		if err := k.cdc.Unmarshal(value, &blog); err != nil {
 			return err
 		}
+
+		fmt.Println("blog", blog)
+
 		allblogs = append(allblogs, blog)
 		return nil
 	})

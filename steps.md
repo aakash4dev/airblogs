@@ -71,12 +71,3 @@ NOTE: `query` `get data`, and not take gas. `message` `post data` and can take g
 
 ### Call functions 
 airblogsd tx blog create-post foo bar --from alice
-
-<hr><hr><hr><hr><hr>
-
-## suggest in discord > docs:
-1.)
-ignite scaffold message createPost title body
-then edit codes at tx.proto > uint64 id : 1 ; 
-OR
-ignite scaffold message createPost title body --response id:uint
